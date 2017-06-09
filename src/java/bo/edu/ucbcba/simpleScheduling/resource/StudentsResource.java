@@ -156,7 +156,6 @@ public class StudentsResource {
                     l.remove(studentId);
                     s.setStudentIds(l);
                 }
-                
             }
             GenericResource.deleteStudent(studentId);
             return Response.status(Response.Status.NO_CONTENT).build();
@@ -179,6 +178,7 @@ public class StudentsResource {
          if(student2!=null){
             student2.setLastName(lastName);
             student2.setFirstName(firstName);
+            Integer auxId=student2.getStudentId();
             student2.setStudentId(studentId);
             List<String> classCodesf=new ArrayList();
             List<String> aux2=classCodes;
@@ -187,21 +187,45 @@ public class StudentsResource {
                     classCodesf.add(c);
                 }
             }
+            //Aqui agrega y quita clases
             if(classCodesf.isEmpty()){
                 List<String> aux=student.getClassCodes();
+                List<String> auxl2=student2.getClassCodes();
+                
+                 for(String c:auxl2){
+                    MyClass mc=GenericResource.getClass(c);
+                    List<Integer> sl=mc.getStudentIds();
+                    sl.remove(auxId);
+                    mc.setStudentIds(sl);
+                }
+                
                 for(String c:aux){
                     MyClass mc=GenericResource.getClass(c);
                     List<Integer> sl=mc.getStudentIds();
                     sl.add(student.getStudentId());
                     mc.setStudentIds(sl);
                 }
+                
                 student2.setClassCodes(classCodes);
                 return Response.status(Response.Status.OK).build();
             }else{
                 List<String> aux=student.getClassCodes();
+                
+                
                 for(String c:classCodesf){
                     aux.remove(c);
                 }
+                
+                
+                List<String> auxl2=student2.getClassCodes();
+                
+                 for(String c:auxl2){
+                    MyClass mc=GenericResource.getClass(c);
+                    List<Integer> sl=mc.getStudentIds();
+                    sl.remove(auxId);
+                    mc.setStudentIds(sl);
+                }
+                
                 for(String c:aux){
                     MyClass mc=GenericResource.getClass(c);
                     List<Integer> sl=mc.getStudentIds();

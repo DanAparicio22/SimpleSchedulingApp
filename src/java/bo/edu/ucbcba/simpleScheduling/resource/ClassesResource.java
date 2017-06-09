@@ -164,6 +164,7 @@ public class ClassesResource {
         if(myClass2!=null){
             myClass2.setDescription(description);
             myClass2.setTitle(title);
+            String auxCode = myClass2.getCode();
             myClass2.setCode(code);
             myClass2.setStudentIds(studentIds);
           
@@ -176,19 +177,42 @@ public class ClassesResource {
             }
             if(classCodesf.isEmpty()){  
                 List<Integer> aux=myClass.getStudentIds();
+                List<Integer> auxl2=myClass2.getStudentIds();
+                
+                for(Integer c:auxl2){
+                    Student s=GenericResource.getStudent(c);
+                    List<String> sl=s.getClassCodes();
+                    sl.remove(auxCode);
+                    s.setClassCodes(sl);
+                }
+                
                 for(Integer c:aux){
                     Student s=GenericResource.getStudent(c);
                     List<String> sl=s.getClassCodes();
                     sl.add(myClass.getCode());
                     s.setClassCodes(sl);
                 }
+                
                 myClass2.setStudentIds(studentIds);
                 return Response.status(Response.Status.OK).build();
             }else{
                 List<Integer> aux=myClass.getStudentIds();
+                
+              
+                
                 for(Integer c:classCodesf){
                     aux.remove(c);
                 }
+                
+                List<Integer> auxl2=myClass2.getStudentIds();
+                
+                for(Integer c:auxl2){
+                    Student s=GenericResource.getStudent(c);
+                    List<String> sl=s.getClassCodes();
+                    sl.remove(auxCode);
+                    s.setClassCodes(sl);
+                }
+                
                 for(Integer c:aux){
                     Student s=GenericResource.getStudent(c);
                     List<String> sl=s.getClassCodes();
